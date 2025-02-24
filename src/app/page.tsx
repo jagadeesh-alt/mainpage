@@ -1,101 +1,115 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { useState } from 'react';
+import { Moon, UserCircle, Play, MoreHorizontal, Clock, Settings } from 'lucide-react';
+import Editor from '@monaco-editor/react';
+
+export default function Page() {
+  const [darkMode, setDarkMode] = useState(true);
+  const [isPreview, setIsPreview] = useState(false);
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className={`min-h-screen p-6 transition-all duration-300 ${darkMode ? 'bg-black text-white' : 'bg-gray-100 text-black'}`}>
+      {/* Navbar */}
+      <div className={`flex justify-between items-center p-4 rounded-xl shadow ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        <span className="text-2xl font-bold text-red-500">darion.</span>
+        <div className="flex space-x-4">
+          {['Categories', 'Models', 'Test'].map((item) => (
+            <button key={item} className={`px-4 py-2 rounded-lg text-sm font-medium transition ${darkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-300 hover:bg-gray-400'}`}>
+              {item}
+            </button>
+          ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="flex gap-3">
+          <button onClick={() => setDarkMode(!darkMode)} className="p-2 rounded-full hover:bg-gray-800 transition">
+            <Moon size={20} />
+          </button>
+          <button className="p-2 rounded-full bg-yellow-500">
+            <UserCircle size={24} />
+          </button>
+        </div>
+      </div>
+
+      {/* Main Layout */}
+      <div className="grid grid-cols-3 gap-6 mt-6">
+        {/* Code Editor Section */}
+        <div className={`col-span-2 p-5 rounded-xl shadow-md transition ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+          <div className="flex items-center gap-3 mb-4">
+            <input 
+              type="text" 
+              placeholder="File name..." 
+              className={`w-full p-2 rounded-lg text-sm ${darkMode ? 'bg-gray-800 text-white' : 'bg-gray-200 text-black'}`}
+            />
+            <button className="p-2 rounded-lg hover:bg-gray-700 transition">
+              <MoreHorizontal size={20} />
+            </button>
+            <button className="p-2 bg-blue-500 rounded-lg hover:bg-blue-600 transition">
+              <Play size={20} />
+            </button>
+          </div>
+
+          {/* Monaco Editor */}
+          <div className="rounded-lg overflow-hidden border border-gray-700">
+            <Editor 
+              height="300px"
+              theme={darkMode ? "vs-dark" : "light"}
+              defaultLanguage="javascript"
+              defaultValue="// Write your code here..."
+              options={{ minimap: { enabled: false } }}
+            />
+          </div>
+        </div>
+
+        {/* Preview Panel */}
+        <div className={`p-5 rounded-xl shadow-md transition ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+          <button 
+            onClick={() => setIsPreview(!isPreview)}
+            className="text-lg font-semibold px-4 py-2 bg-white text-black rounded-full shadow-md w-full"
+          >
+            {isPreview ? 'Back to Editor' : 'Preview'}
+          </button>
+
+          {/* Toggle Between Preview and Default Sections */}
+          {isPreview ? (
+            // 🟢 New Preview Section
+            <div className="mt-4 p-4 rounded-lg bg-gray-800 border border-gray-700 min-h-[200px] flex items-center justify-center text-white text-lg">
+              <p>📌 This is the live preview output!</p>
+            </div>
+          ) : (
+            // 🟢 Original Output, Suggestions, Corrections Sections
+            <>
+              <div className="mt-4 p-4 rounded-xl border border-gray-700 bg-gray-800">
+                <h4 className="text-sm font-semibold text-white">Suggestions</h4>
+                <div className="mt-2 p-4 rounded-lg bg-gray-900 min-h-[100px]"></div>
+              </div>
+              <div className="mt-4 p-4 rounded-xl border border-gray-700 bg-gray-800">
+                <h4 className="text-sm font-semibold text-white">Corrections</h4>
+                <div className="mt-2 p-4 rounded-lg bg-gray-900 min-h-[100px]"></div>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      {/* Bottom Section */}
+      <div className={`mt-6 flex items-center p-4 rounded-xl shadow-md transition ${darkMode ? 'bg-gray-900' : 'bg-white'}`}>
+        {/* Creation Button */}
+        <button className="px-6 py-2 bg-blue-500 text-white text-sm rounded-full font-medium hover:bg-blue-600 transition">
+          Creation
+        </button>
+
+        {/* Profile, History, Settings */}
+        <div className="ml-auto flex space-x-4">
+          {[{ icon: <UserCircle size={18} />, label: 'Profile' }, { icon: <Clock size={18} />, label: 'History' }, { icon: <Settings size={18} />, label: 'Settings' }].map(({ icon, label }) => (
+            <button key={label} className="p-2 rounded-full bg-gray-600 text-white hover:bg-gray-500 transition group relative">
+              {icon}
+              <span className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 px-2 py-1 text-xs bg-black text-white rounded opacity-0 group-hover:opacity-100 transition">
+                {label}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
